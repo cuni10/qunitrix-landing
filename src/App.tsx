@@ -161,7 +161,7 @@ const App: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col md:flex-row items-center justify-between">
           <div className="md:w-1/2 mb-10 md:mb-0">
             <span className="inline-block py-1 px-3 rounded-full bg-indigo-800 text-indigo-100 text-sm font-semibold tracking-wide mb-4">
-              Próximamente / Nuevo Servicio
+              Nuevo Servicio
             </span>
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               Conoce StockApp
