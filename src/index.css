@@ -1,0 +1,7 @@
+/* Importamos Tailwind v4 */
+@import "tailwindcss";
+
+/* Tu CSS personalizado */
+html {
+  scroll-behavior: smooth;
+}
