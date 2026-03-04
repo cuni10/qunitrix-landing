@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   Github,
   Code,
@@ -211,10 +212,18 @@ const App: React.FC = () => {
             <span className="font-bold text-xl">Qunitrix</span>
           </div>
 
-          <p className="text-sm">
-            © {new Date().getFullYear()} Qunitrix Software Solutions. Todos los
-            derechos reservados.
-          </p>
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-sm">
+              © {new Date().getFullYear()} Qunitrix Software Solutions. Todos los
+              derechos reservados.
+            </p>
+            <Link
+              to="/privacidad"
+              className="text-sm hover:text-indigo-400 transition underline underline-offset-2"
+            >
+              Política de Privacidad
+            </Link>
+          </div>
 
           <a
             href="https://github.com/cuni10"
