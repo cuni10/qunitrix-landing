@@ -217,12 +217,26 @@ const App: React.FC = () => {
               © {new Date().getFullYear()} Qunitrix Software Solutions. Todos los
               derechos reservados.
             </p>
-            <Link
-              to="/privacidad"
-              className="text-sm hover:text-indigo-400 transition underline underline-offset-2"
-            >
-              Política de Privacidad
-            </Link>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link
+                to="/privacidad"
+                className="text-sm hover:text-indigo-400 transition underline underline-offset-2"
+              >
+                Política de Privacidad
+              </Link>
+              <Link
+                to="/terminos"
+                className="text-sm hover:text-indigo-400 transition underline underline-offset-2"
+              >
+                Condiciones de Servicio
+              </Link>
+              <Link
+                to="/eliminacion-datos"
+                className="text-sm hover:text-indigo-400 transition underline underline-offset-2"
+              >
+                Eliminación de Datos
+              </Link>
+            </div>
           </div>
 
           <a
