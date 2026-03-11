@@ -1,0 +1,19 @@
+Asunto: Nueva consulta web de {{user_name}} desde Qunitrix
+
+¡Hola Equipo Qunitrix!
+
+Tienen un nuevo mensaje desde el formulario de la página web de Qunitrix.
+
+👤 Detalles del Contacto:
+-------------------------
+Nombre: {{user_name}}
+Email: {{user_email}}
+Empresa: {{user_company}}
+
+💬 Mensaje:
+-------------------------
+{{message}}
+
+
+-------------------------
+Este correo fue generado automáticamente por la web de Qunitrix (vía EmailJS).

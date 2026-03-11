@@ -38,7 +38,7 @@ const DataDeletion: React.FC = () => {
       {/* Nav */}
       <nav className="sticky top-0 z-50 px-6 py-4 border-b" style={{ background: "rgba(8,12,20,0.9)", borderColor: "rgba(255,255,255,0.07)", backdropFilter: "blur(16px)" }}>
         <div className="max-w-4xl mx-auto flex justify-between items-center">
-          <Link to="/" className="flex items-center gap-2 text-white font-bold text-lg" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+          <Link to="/" className="flex items-center gap-2 text-white font-bold text-lg" style={{ fontFamily: "'Lexend', sans-serif" }}>
             <img src="/favicon.ico" alt="Qunitrix" className="h-7 w-auto" />
             Qunitrix
           </Link>
@@ -51,7 +51,7 @@ const DataDeletion: React.FC = () => {
       {/* Header */}
       <header className="py-16 px-6 text-center border-b" style={{ borderColor: "rgba(255,255,255,0.06)", background: "linear-gradient(180deg, rgba(30,58,138,0.15) 0%, transparent 100%)" }}>
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-black mb-3 text-white" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+          <h1 className="text-4xl md:text-5xl font-black mb-3 text-white" style={{ fontFamily: "'Lexend', sans-serif" }}>
             Eliminación de Datos
           </h1>
           <p className="text-slate-500">
