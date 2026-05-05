@@ -1,0 +1,316 @@
+:root {
+    --green: #00ff88;
+    --green-dim: rgba(0, 255, 136, 0.15);
+    --green-glow: rgba(0, 255, 136, 0.3);
+    --glass-bg: rgba(0, 0, 0, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --shine: rgba(255, 255, 255, 0.15);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Space Grotesk", sans-serif;
+    background: #050505;
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* VIDEO DE FONDO */
+.bg-video {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* SVG FILTERS */
+.svg-filters {
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+
+/* SECCIONES */
+.main-container {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+/* VIEWS */
+.view {
+    display: none;
+    padding: 3rem 4rem;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+.view.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* LIQUID GLASS BASE */
+.glass-panel {
+    position: relative;
+    overflow: hidden;
+    border-radius: 2rem;
+    cursor: default;
+    transition: width 0.4s ease, min-height 0.4s ease;
+    box-shadow:
+        0 6px 6px rgba(0, 0, 0, 0.2),
+        0 0 20px rgba(0, 0, 0, 0.1);
+    min-width: 400px;
+    min-height: 300px;
+}
+
+.glass-panel .glass-effect {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    backdrop-filter: blur(3px);
+    filter: url(#glass-distortion);
+    overflow: hidden;
+    isolation: isolate;
+    border-radius: inherit;
+}
+
+.glass-panel .glass-tint {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        var(--glass-bg),
+        rgba(255, 255, 255, 0.05)
+    );
+    border-radius: inherit;
+}
+
+.glass-panel .glass-shine {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    overflow: hidden;
+    border-radius: inherit;
+    box-shadow:
+        inset 2px 2px 1px 0 var(--shine),
+        inset -1px -1px 1px 1px var(--shine);
+}
+
+.glass-panel .glass-content {
+    position: relative;
+    z-index: 3;
+    border-radius: inherit;
+}
+
+/* DOCK */
+.dock {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+}
+
+.dock-glass {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    border-radius: 2rem;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+    box-shadow:
+        0 6px 6px rgba(0, 0, 0, 0.2),
+        0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.dock-glass .glass-effect {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    backdrop-filter: blur(3px);
+    filter: url(#glass-distortion);
+    overflow: hidden;
+    isolation: isolate;
+    border-radius: inherit;
+}
+
+.dock-glass .glass-tint {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        var(--glass-bg),
+        rgba(255, 255, 255, 0.05)
+    );
+    border-radius: inherit;
+}
+
+.dock-glass .glass-shine {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    overflow: hidden;
+    border-radius: inherit;
+    box-shadow:
+        inset 2px 2px 1px 0 var(--shine),
+        inset -1px -1px 1px 1px var(--shine);
+}
+
+.dock-glass .dock-items {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: inherit;
+}
+
+.dock-item {
+    padding: 0.7rem 1.8rem;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.25);
+    color: #fff;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.dock-item:hover {
+    opacity: 0.9;
+}
+
+.dock-item.active {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.45);
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: inset -2px -2px 2px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+/* HERO */
+.view .logo-img {
+    max-width: clamp(200px, 25vw, 350px);
+    height: auto;
+    filter: drop-shadow(0 0 30px rgba(0, 255, 136, 0.6)) drop-shadow(0 0 60px rgba(0, 255, 136, 0.3));
+    transition: filter 0.3s ease;
+}
+
+.view .logo-img:hover {
+    filter: drop-shadow(0 0 40px rgba(0, 255, 136, 0.8)) drop-shadow(0 0 80px rgba(0, 255, 136, 0.5));
+}
+
+.view .subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
+    font-weight: 300;
+    margin-top: 0.5rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    text-align: center;
+    color: #00ff88;
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.5), 0 0 40px rgba(0, 255, 136, 0.3);
+}
+
+/* PROYECTOS */
+.view .section-title {
+    font-size: 2rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 2rem;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 20px var(--green-glow);
+}
+
+.project-card {
+    display: block;
+    text-decoration: none;
+    position: relative;
+    padding: 2.5rem 4rem;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+    cursor: pointer;
+    text-align: center;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.project-card h3 {
+    font-size: 1.3rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
+    color: #fff;
+}
+
+.project-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    border-color: rgba(255, 255, 255, 0.35);
+    background: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.06);
+}
+
+.project-card h3::after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.6);
+    margin-top: 0.8rem;
+    transition: width 0.3s ease;
+}
+
+.project-card:hover h3::after {
+    width: 100%;
+}
+
+@media (max-width: 600px) {
+    .view {
+        padding: 2.5rem 2rem;
+    }
+
+    .glass-panel {
+        min-width: 300px;
+    }
+
+    .dock {
+        bottom: 1rem;
+    }
+
+    .dock-item {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.85rem;
+    }
+
+    .project-card {
+        padding: 2rem 3rem;
+    }
+}
