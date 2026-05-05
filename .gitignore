@@ -2,5 +2,6 @@ node_modules/
 dist/
 .cache/
 *.webm
+public/*.webm
 .env
 .DS_Store
