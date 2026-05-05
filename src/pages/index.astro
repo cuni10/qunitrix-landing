@@ -8,6 +8,8 @@ import "../styles/global.css";
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Qunitrix</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet" />
@@ -50,7 +52,9 @@ import "../styles/global.css";
         <div class="glass-content">
 
           <div id="view-inicio" class="view active">
-            <img src="/logo-v5.png" alt="Qunitrix" class="logo-img" />
+            <div class="logo-wrapper">
+              <img src="/logo-v5.png" alt="Qunitrix" class="logo-img" id="logo-clickable" />
+            </div>
             <p class="subtitle">Software</p>
           </div>
 
@@ -68,6 +72,7 @@ import "../styles/global.css";
     <script>
       const items = document.querySelectorAll(".dock-item");
       const views = document.querySelectorAll(".view");
+      const logo = document.querySelector(".logo-wrapper");
 
       items.forEach((item) => {
         item.addEventListener("click", () => {
@@ -80,6 +85,18 @@ import "../styles/global.css";
           document.getElementById("view-" + target).classList.add("active");
         });
       });
+
+      if (logo) {
+        logo.addEventListener("click", () => {
+          logo.classList.remove("logo-animate");
+          void logo.offsetWidth;
+          logo.classList.add("logo-animate");
+        });
+
+        logo.addEventListener("animationend", () => {
+          logo.classList.remove("logo-animate");
+        });
+      }
     </script>
   </body>
 </html>
