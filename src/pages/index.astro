@@ -8,6 +8,7 @@ import "../styles/global.css";
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Qunitrix</title>
+    <link rel="icon" type="image/svg+xml" href="/Logo_V5.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -54,6 +55,7 @@ import "../styles/global.css";
 
           <div id="view-inicio" class="view active">
             <div class="logo-wrapper">
+              <div class="logo-blur"></div>
               <img src="/Logo_V5.svg" alt="Qunitrix" class="logo-img" id="logo-clickable" width="300" draggable="false" />
             </div>
             <p class="subtitle">Software</p>
@@ -74,8 +76,6 @@ import "../styles/global.css";
     <script>
       const items = document.querySelectorAll(".dock-item");
       const views = document.querySelectorAll(".view");
-      const logo = document.querySelector(".logo-wrapper");
-
       items.forEach((item) => {
         item.addEventListener("click", () => {
           const target = item.getAttribute("data-view");
@@ -88,17 +88,6 @@ import "../styles/global.css";
         });
       });
 
-      if (logo) {
-        logo.addEventListener("click", () => {
-          logo.classList.remove("logo-animate");
-          void logo.offsetWidth;
-          logo.classList.add("logo-animate");
-        });
-
-        logo.addEventListener("animationend", () => {
-          logo.classList.remove("logo-animate");
-        });
-      }
     </script>
   </body>
 </html>
