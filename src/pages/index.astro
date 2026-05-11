@@ -209,6 +209,64 @@ import "../styles/global.css";
                     p.style.animation = "none";
                 });
             }, 1500);
+
+            const glassPanel = document.querySelector(".glass-panel");
+            let panelOx = 0, panelOy = 0;
+            let dragState = null;
+
+            function getPos(e) {
+                return e.touches
+                    ? { x: e.touches[0].clientX, y: e.touches[0].clientY }
+                    : { x: e.clientX, y: e.clientY };
+            }
+
+            function initPanel() {
+                const r = glassPanel.getBoundingClientRect();
+                glassPanel.style.left = r.left + "px";
+                glassPanel.style.top = r.top + "px";
+                glassPanel.style.transform = "none";
+                panelOx = 0;
+                panelOy = 0;
+            }
+            initPanel();
+
+            glassPanel.addEventListener("mousedown", function (e) {
+                if (e.target.closest(".dock-item, button, a, .project-card")) return;
+                const pos = getPos(e);
+                dragState = { sx: pos.x, sy: pos.y, pox: panelOx, poy: panelOy };
+                e.stopPropagation();
+            });
+
+            glassPanel.addEventListener("touchstart", function (e) {
+                if (e.target.closest(".dock-item, button, a, .project-card")) return;
+                const pos = getPos(e);
+                dragState = { sx: pos.x, sy: pos.y, pox: panelOx, poy: panelOy };
+                e.stopPropagation();
+            }, { passive: false });
+
+            document.addEventListener("mousemove", function (e) {
+                if (!dragState) return;
+                const pos = getPos(e);
+                panelOx = dragState.pox + (pos.x - dragState.sx);
+                panelOy = dragState.poy + (pos.y - dragState.sy);
+                glassPanel.style.transform = "translate(" + panelOx + "px," + panelOy + "px)";
+            });
+
+            document.addEventListener("mouseup", function () {
+                dragState = null;
+            });
+
+            document.addEventListener("touchmove", function (e) {
+                if (!dragState) return;
+                const pos = getPos(e);
+                panelOx = dragState.pox + (pos.x - dragState.sx);
+                panelOy = dragState.poy + (pos.y - dragState.sy);
+                glassPanel.style.transform = "translate(" + panelOx + "px," + panelOy + "px)";
+            }, { passive: false });
+
+            document.addEventListener("touchend", function () {
+                dragState = null;
+            });
         </script>
     </body>
 </html>

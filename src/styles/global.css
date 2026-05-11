@@ -50,10 +50,13 @@ body {
 .main-container {
     position: fixed;
     inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
+}
+
+.glass-panel {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 
 /* VIEWS */
@@ -78,7 +81,6 @@ body {
 
 /* LIQUID GLASS BASE */
 .glass-panel {
-    position: relative;
     overflow: hidden;
     border-radius: 2rem;
     cursor: default;
@@ -258,7 +260,7 @@ body {
     max-width: clamp(200px, 25vw, 350px);
     height: auto;
     display: block;
-    opacity: 0.85;
+    opacity: 0.95;
     position: relative;
     z-index: 1;
     user-select: none;
@@ -287,7 +289,7 @@ body {
     text-align: center;
     margin-bottom: 2rem;
     letter-spacing: 0.1em;
-    text-shadow: 0 0 20px var(--green-glow);
+    text-shadow: 0 0 20px #050505;
 }
 
 .project-card {
