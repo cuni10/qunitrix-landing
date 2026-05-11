@@ -2,7 +2,7 @@
     --green: #00ff88;
     --green-dim: rgba(0, 255, 136, 0.15);
     --green-glow: rgba(0, 255, 136, 0.3);
-    --glass-bg: rgba(0, 0, 0, 0.4);
+    --glass-bg: rgba(0, 0, 0, 0.6);
     --glass-border: rgba(255, 255, 255, 0.12);
     --shine: rgba(255, 255, 255, 0.15);
 }
@@ -19,6 +19,8 @@ body {
     color: #fff;
     min-height: 100vh;
     overflow-x: hidden;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 #logo-clickable polygon,
@@ -36,6 +38,26 @@ body {
     z-index: -1;
     width: 100%;
     height: 100%;
+    object-fit: cover;
+}
+
+video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+    -webkit-appearance: none !important;
+    opacity: 0 !important;
+}
+
+video::-webkit-media-controls {
+    display: none !important;
+}
+
+.particle-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
 }
 
 /* SVG FILTERS */
@@ -63,6 +85,7 @@ body {
 .view {
     display: none;
     padding: 2rem 2.5rem;
+    text-align: center;
     animation: fadeIn 0.3s ease forwards;
 }
 
@@ -84,14 +107,13 @@ body {
     overflow: hidden;
     border-radius: 2rem;
     cursor: default;
-    transition:
-        width 0.4s ease,
-        min-height 0.4s ease;
+    transition: min-height 0.4s ease;
     box-shadow:
         0 6px 6px rgba(0, 0, 0, 0.2),
         0 0 20px rgba(0, 0, 0, 0.1);
     min-width: 400px;
     min-height: 300px;
+    width: min(480px, calc(100vw - 2rem));
 }
 
 .glass-panel .glass-effect {
@@ -416,5 +438,46 @@ body {
     100% {
         opacity: 1;
         transform: scale(1);
+    }
+}
+
+/* SOCIAL LINKS */
+.social-links {
+    position: fixed;
+    top: 2rem;
+    left: 2rem;
+    right: auto;
+    z-index: 200;
+    display: flex;
+    gap: 0.75rem;
+}
+
+.social-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+    border-radius: 0.25rem;
+}
+
+.social-link:hover {
+    background: var(--green);
+    color: #000;
+}
+
+@media (max-width: 600px) {
+    .social-links {
+        top: 1rem;
+        left: 1rem;
+        gap: 0.25rem;
+    }
+
+    .social-link {
+        font-size: 0.75rem;
+        padding: 0.35rem 0.6rem;
     }
 }
