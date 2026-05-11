@@ -353,6 +353,10 @@ import "../styles/global.css";
             }
 
             function initPanel() {
+                glassPanel.style.left = "";
+                glassPanel.style.top = "";
+                glassPanel.style.transform = "";
+                void glassPanel.offsetHeight;
                 const r = glassPanel.getBoundingClientRect();
                 glassPanel.style.left = r.left + "px";
                 glassPanel.style.top = r.top + "px";
@@ -361,6 +365,7 @@ import "../styles/global.css";
                 panelOy = 0;
             }
             initPanel();
+            window.addEventListener("resize", initPanel);
 
             glassPanel.addEventListener("mousedown", function (e) {
                 if (e.target.closest(".dock-item, button, a, .project-card"))
