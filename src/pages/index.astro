@@ -4,90 +4,211 @@ import "../styles/global.css";
 
 <!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Qunitrix</title>
-    <link rel="icon" type="image/svg+xml" href="/Logo_V5.svg" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet" />
-  </head>
-  <body>
-    <svg class="svg-filters" aria-hidden="true">
-      <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%" filterUnits="objectBoundingBox">
-        <feTurbulence type="fractalNoise" baseFrequency="0.01 0.01" numOctaves="1" seed="5" result="turbulence" />
-        <feComponentTransfer in="turbulence" result="mapped">
-          <feFuncR type="gamma" amplitude="1" exponent="10" offset="0.5" />
-          <feFuncG type="gamma" amplitude="0" exponent="1" offset="0" />
-          <feFuncB type="gamma" amplitude="0" exponent="1" offset="0.5" />
-        </feComponentTransfer>
-        <feGaussianBlur in="turbulence" stdDeviation="3" result="softMap" />
-        <feDisplacementMap in="SourceGraphic" in2="softMap" scale="150" xChannelSelector="R" yChannelSelector="G" />
-      </filter>
-    </svg>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Qunitrix</title>
+        <link rel="icon" type="image/svg+xml" href="/Logo_V5.svg" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/apple-touch-icon.png"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <svg class="svg-filters" aria-hidden="true">
+            <filter
+                id="glass-distortion"
+                x="0%"
+                y="0%"
+                width="100%"
+                height="100%"
+                filterUnits="objectBoundingBox"
+            >
+                <feTurbulence
+                    type="fractalNoise"
+                    baseFrequency="0.01 0.01"
+                    numOctaves="1"
+                    seed="5"
+                    result="turbulence"></feTurbulence>
+                <feComponentTransfer in="turbulence" result="mapped">
+                    <feFuncR
+                        type="gamma"
+                        amplitude="1"
+                        exponent="10"
+                        offset="0.5"></feFuncR>
+                    <feFuncG type="gamma" amplitude="0" exponent="1" offset="0"
+                    ></feFuncG>
+                    <feFuncB
+                        type="gamma"
+                        amplitude="0"
+                        exponent="1"
+                        offset="0.5"></feFuncB>
+                </feComponentTransfer>
+                <feGaussianBlur
+                    in="turbulence"
+                    stdDeviation="3"
+                    result="softMap"></feGaussianBlur>
+                <feDisplacementMap
+                    in="SourceGraphic"
+                    in2="softMap"
+                    scale="150"
+                    xChannelSelector="R"
+                    yChannelSelector="G"></feDisplacementMap>
+            </filter>
+        </svg>
 
-    <video class="bg-video" autoplay muted loop playsinline>
-      <source src="/bg.webm" type="video/webm" />
-    </video>
+        <video class="bg-video" autoplay muted loop playsinline>
+            <source src="/bg.webm" type="video/webm" />
+        </video>
 
-    <nav class="dock">
-      <div class="dock-glass">
-        <div class="glass-effect"></div>
-        <div class="glass-tint"></div>
-        <div class="glass-shine"></div>
-        <div class="glass-content dock-items">
-          <button class="dock-item active" data-view="inicio">Inicio</button>
-          <button class="dock-item" data-view="proyectos">Proyectos</button>
-        </div>
-      </div>
-    </nav>
-
-    <div class="main-container">
-      <div class="glass-panel">
-        <div class="glass-effect"></div>
-        <div class="glass-tint"></div>
-        <div class="glass-shine"></div>
-        <div class="glass-content">
-
-          <div id="view-inicio" class="view active">
-            <div class="logo-wrapper">
-              <div class="logo-blur"></div>
-              <img src="/Logo_V5.svg" alt="Qunitrix" class="logo-img" id="logo-clickable" width="300" draggable="false" />
+        <nav class="dock">
+            <div class="dock-glass">
+                <div class="glass-effect"></div>
+                <div class="glass-tint"></div>
+                <div class="glass-shine"></div>
+                <div class="glass-content dock-items">
+                    <button class="dock-item active" data-view="inicio"
+                        >Inicio</button
+                    >
+                    <button class="dock-item" data-view="proyectos"
+                        >Proyectos</button
+                    >
+                </div>
             </div>
-            <p class="subtitle">Software</p>
-          </div>
+        </nav>
 
-          <div id="view-proyectos" class="view">
-            <h2 class="section-title">Proyectos</h2>
-            <a href="https://stockapp.qunitrix.com" class="project-card" target="_blank" rel="noopener">
-              <img src="/faviconStockApp.ico" alt="" class="project-icon" />
-              <h3>StockApp</h3>
-            </a>
-          </div>
+        <div class="main-container">
+            <div class="glass-panel">
+                <div class="glass-effect"></div>
+                <div class="glass-tint"></div>
+                <div class="glass-shine"></div>
+                <div class="glass-content">
+                    <div id="view-inicio" class="view active">
+                        <div class="logo-wrapper">
+                            <svg
+                                alt="Qunitrix"
+                                class="logo-img"
+                                id="logo-clickable"
+                                width="300"
+                                draggable="false"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 1024 1024"
+                            >
+                                <g id="a" data-name="Capa 1" class="logo-piece piece-a">
+                                    <polygon
+                                        points="0 226.96 226.96 0 226.96 226.96 0 226.96"
+                                    ></polygon>
+                                </g>
+                                <g id="b" data-name="Capa 9" class="logo-piece piece-b">
+                                    <polygon
+                                        points="0 797.04 226.96 1024 226.96 797.04 0 797.04"
+                                    ></polygon>
+                                </g>
+                                <g id="c" data-name="Capa 7" class="logo-piece piece-c">
+                                    <polygon
+                                        points="797.04 226.96 797.04 0 1024 226.96 797.04 226.96"
+                                    ></polygon>
+                                </g>
+                                <g id="d" data-name="Capa 8" class="logo-piece piece-d">
+                                    <polygon
+                                        points="797.04 797.04 797.04 1024 1024 797.04 797.04 797.04"
+                                    ></polygon>
+                                </g>
+                                <g id="e" data-name="Capa 5" class="logo-piece piece-e">
+                                    <polyline
+                                        points="797.04 797.04 226.96 404.02 226.96 797.04 797.04 797.04"
+                                    ></polyline>
+                                </g>
+                                <g id="f" data-name="Capa 6" class="logo-piece piece-f">
+                                    <rect
+                                        x="226.96"
+                                        y="797.04"
+                                        width="570.08"
+                                        height="226.96"></rect>
+                                </g>
+                                <g id="g" data-name="Capa 3" class="logo-piece piece-g">
+                                    <rect
+                                        y="226.96"
+                                        width="226.96"
+                                        height="570.08"></rect>
+                                </g>
+                                <g id="h" data-name="Capa 4" class="logo-piece piece-h">
+                                    <rect
+                                        x="398.52"
+                                        y="-171.56"
+                                        width="226.96"
+                                        height="570.08"
+                                        transform="translate(625.48 -398.52) rotate(90)"
+                                    ></rect>
+                                </g>
+                                <g id="i" data-name="Capa 2" class="logo-piece piece-i">
+                                    <rect
+                                        x="797.04"
+                                        y="226.96"
+                                        width="226.96"
+                                        height="570.08"
+                                        transform="translate(1821.04 1024) rotate(180)"
+                                    ></rect>
+                                </g>
+                            </svg>
+                        </div>
+                        <p class="subtitle">Software</p>
+                    </div>
 
+                    <div id="view-proyectos" class="view">
+                        <h2 class="section-title">Proyectos</h2>
+                        <a
+                            href="https://stockapp.qunitrix.com"
+                            class="project-card"
+                            target="_blank"
+                            rel="noopener"
+                        >
+                            <img
+                                src="/faviconStockApp.ico"
+                                alt=""
+                                class="project-icon"
+                            />
+                            <h3>StockApp</h3>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <script>
-      const items = document.querySelectorAll(".dock-item");
-      const views = document.querySelectorAll(".view");
-      items.forEach((item) => {
-        item.addEventListener("click", () => {
-          const target = item.getAttribute("data-view");
+        <script>
+            const items = document.querySelectorAll(".dock-item");
+            const views = document.querySelectorAll(".view");
+            items.forEach((item) => {
+                item.addEventListener("click", () => {
+                    const target = item.getAttribute("data-view");
 
-          items.forEach((i) => i.classList.remove("active"));
-          item.classList.add("active");
+                    items.forEach((i) => i.classList.remove("active"));
+                    item.classList.add("active");
 
-          views.forEach((v) => v.classList.remove("active"));
-          document.getElementById("view-" + target).classList.add("active");
-        });
-      });
+                    views.forEach((v) => v.classList.remove("active"));
+                    document
+                        .getElementById("view-" + target)
+                        .classList.add("active");
+                });
+            });
 
-    </script>
-  </body>
+            const pieces = document.querySelectorAll(".logo-piece");
+            setTimeout(() => {
+                pieces.forEach((p) => {
+                    p.style.opacity = "1";
+                    p.style.transform = "scale(1)";
+                    p.style.animation = "none";
+                });
+            }, 1500);
+        </script>
+    </body>
 </html>
