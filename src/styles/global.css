@@ -79,6 +79,16 @@ body {
     }
 }
 
+video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+    -webkit-appearance: none !important;
+    opacity: 0 !important;
+}
+
+video::-webkit-media-controls {
+    display: none !important;
+}
+
 /* LIQUID GLASS BASE */
 .glass-panel {
     overflow: hidden;

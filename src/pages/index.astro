@@ -67,7 +67,7 @@ import "../styles/global.css";
         </svg>
 
         <video class="bg-video" autoplay muted loop playsinline>
-            <source src="/bg.webm" type="video/webm" />
+            <source src="/bg.mp4#t=0.001" type="video/mp4" />
         </video>
 
         <nav class="dock">
@@ -103,45 +103,77 @@ import "../styles/global.css";
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 1024 1024"
                             >
-                                <g id="a" data-name="Capa 1" class="logo-piece piece-a">
+                                <g
+                                    id="a"
+                                    data-name="Capa 1"
+                                    class="logo-piece piece-a"
+                                >
                                     <polygon
                                         points="0 226.96 226.96 0 226.96 226.96 0 226.96"
                                     ></polygon>
                                 </g>
-                                <g id="b" data-name="Capa 9" class="logo-piece piece-b">
+                                <g
+                                    id="b"
+                                    data-name="Capa 9"
+                                    class="logo-piece piece-b"
+                                >
                                     <polygon
                                         points="0 797.04 226.96 1024 226.96 797.04 0 797.04"
                                     ></polygon>
                                 </g>
-                                <g id="c" data-name="Capa 7" class="logo-piece piece-c">
+                                <g
+                                    id="c"
+                                    data-name="Capa 7"
+                                    class="logo-piece piece-c"
+                                >
                                     <polygon
                                         points="797.04 226.96 797.04 0 1024 226.96 797.04 226.96"
                                     ></polygon>
                                 </g>
-                                <g id="d" data-name="Capa 8" class="logo-piece piece-d">
+                                <g
+                                    id="d"
+                                    data-name="Capa 8"
+                                    class="logo-piece piece-d"
+                                >
                                     <polygon
                                         points="797.04 797.04 797.04 1024 1024 797.04 797.04 797.04"
                                     ></polygon>
                                 </g>
-                                <g id="e" data-name="Capa 5" class="logo-piece piece-e">
+                                <g
+                                    id="e"
+                                    data-name="Capa 5"
+                                    class="logo-piece piece-e"
+                                >
                                     <polyline
                                         points="797.04 797.04 226.96 404.02 226.96 797.04 797.04 797.04"
                                     ></polyline>
                                 </g>
-                                <g id="f" data-name="Capa 6" class="logo-piece piece-f">
+                                <g
+                                    id="f"
+                                    data-name="Capa 6"
+                                    class="logo-piece piece-f"
+                                >
                                     <rect
                                         x="226.96"
                                         y="797.04"
                                         width="570.08"
                                         height="226.96"></rect>
                                 </g>
-                                <g id="g" data-name="Capa 3" class="logo-piece piece-g">
+                                <g
+                                    id="g"
+                                    data-name="Capa 3"
+                                    class="logo-piece piece-g"
+                                >
                                     <rect
                                         y="226.96"
                                         width="226.96"
                                         height="570.08"></rect>
                                 </g>
-                                <g id="h" data-name="Capa 4" class="logo-piece piece-h">
+                                <g
+                                    id="h"
+                                    data-name="Capa 4"
+                                    class="logo-piece piece-h"
+                                >
                                     <rect
                                         x="398.52"
                                         y="-171.56"
@@ -150,7 +182,11 @@ import "../styles/global.css";
                                         transform="translate(625.48 -398.52) rotate(90)"
                                     ></rect>
                                 </g>
-                                <g id="i" data-name="Capa 2" class="logo-piece piece-i">
+                                <g
+                                    id="i"
+                                    data-name="Capa 2"
+                                    class="logo-piece piece-i"
+                                >
                                     <rect
                                         x="797.04"
                                         y="226.96"
@@ -187,6 +223,9 @@ import "../styles/global.css";
         <script>
             const items = document.querySelectorAll(".dock-item");
             const views = document.querySelectorAll(".view");
+            const video = document.querySelector(".bg-video");
+
+            video.play();
             items.forEach((item) => {
                 item.addEventListener("click", () => {
                     const target = item.getAttribute("data-view");
@@ -211,7 +250,8 @@ import "../styles/global.css";
             }, 1500);
 
             const glassPanel = document.querySelector(".glass-panel");
-            let panelOx = 0, panelOy = 0;
+            let panelOx = 0,
+                panelOy = 0;
             let dragState = null;
 
             function getPos(e) {
@@ -231,38 +271,62 @@ import "../styles/global.css";
             initPanel();
 
             glassPanel.addEventListener("mousedown", function (e) {
-                if (e.target.closest(".dock-item, button, a, .project-card")) return;
+                if (e.target.closest(".dock-item, button, a, .project-card"))
+                    return;
                 const pos = getPos(e);
-                dragState = { sx: pos.x, sy: pos.y, pox: panelOx, poy: panelOy };
+                dragState = {
+                    sx: pos.x,
+                    sy: pos.y,
+                    pox: panelOx,
+                    poy: panelOy,
+                };
                 e.stopPropagation();
             });
 
-            glassPanel.addEventListener("touchstart", function (e) {
-                if (e.target.closest(".dock-item, button, a, .project-card")) return;
-                const pos = getPos(e);
-                dragState = { sx: pos.x, sy: pos.y, pox: panelOx, poy: panelOy };
-                e.stopPropagation();
-            }, { passive: false });
+            glassPanel.addEventListener(
+                "touchstart",
+                function (e) {
+                    if (
+                        e.target.closest(".dock-item, button, a, .project-card")
+                    )
+                        return;
+                    const pos = getPos(e);
+                    dragState = {
+                        sx: pos.x,
+                        sy: pos.y,
+                        pox: panelOx,
+                        poy: panelOy,
+                    };
+                    e.stopPropagation();
+                },
+                { passive: false },
+            );
 
             document.addEventListener("mousemove", function (e) {
                 if (!dragState) return;
                 const pos = getPos(e);
                 panelOx = dragState.pox + (pos.x - dragState.sx);
                 panelOy = dragState.poy + (pos.y - dragState.sy);
-                glassPanel.style.transform = "translate(" + panelOx + "px," + panelOy + "px)";
+                glassPanel.style.transform =
+                    "translate(" + panelOx + "px," + panelOy + "px)";
             });
 
             document.addEventListener("mouseup", function () {
                 dragState = null;
             });
 
-            document.addEventListener("touchmove", function (e) {
-                if (!dragState) return;
-                const pos = getPos(e);
-                panelOx = dragState.pox + (pos.x - dragState.sx);
-                panelOy = dragState.poy + (pos.y - dragState.sy);
-                glassPanel.style.transform = "translate(" + panelOx + "px," + panelOy + "px)";
-            }, { passive: false });
+            document.addEventListener(
+                "touchmove",
+                function (e) {
+                    if (!dragState) return;
+                    const pos = getPos(e);
+                    panelOx = dragState.pox + (pos.x - dragState.sx);
+                    panelOy = dragState.poy + (pos.y - dragState.sy);
+                    glassPanel.style.transform =
+                        "translate(" + panelOx + "px," + panelOy + "px)";
+                },
+                { passive: false },
+            );
 
             document.addEventListener("touchend", function () {
                 dragState = null;
