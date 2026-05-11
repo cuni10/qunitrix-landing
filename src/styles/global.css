@@ -36,7 +36,6 @@ body {
     z-index: -1;
     width: 100%;
     height: 100%;
-    object-fit: cover;
 }
 
 /* SVG FILTERS */
@@ -77,16 +76,6 @@ body {
     to {
         opacity: 1;
     }
-}
-
-video::-webkit-media-controls-start-playback-button {
-    display: none !important;
-    -webkit-appearance: none !important;
-    opacity: 0 !important;
-}
-
-video::-webkit-media-controls {
-    display: none !important;
 }
 
 /* LIQUID GLASS BASE */

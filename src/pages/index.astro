@@ -66,9 +66,7 @@ import "../styles/global.css";
             </filter>
         </svg>
 
-        <video class="bg-video" autoplay muted loop playsinline>
-            <source src="/bg.mp4#t=0.001" type="video/mp4" />
-        </video>
+        <canvas id="bg-canvas" class="bg-video"></canvas>
 
         <nav class="dock">
             <div class="dock-glass">
@@ -223,9 +221,103 @@ import "../styles/global.css";
         <script>
             const items = document.querySelectorAll(".dock-item");
             const views = document.querySelectorAll(".view");
-            const video = document.querySelector(".bg-video");
 
-            video.play();
+            // Canvas video (bypass iOS Low Power Mode autoplay restriction)
+            const canvas = document.getElementById("bg-canvas");
+            const ctx = canvas.getContext("2d");
+            const video = document.createElement("video");
+            video.muted = true;
+            video.loop = true;
+            video.playsInline = true;
+            video.preload = "auto";
+
+            [
+                { src: "/bg.mp4", type: "video/mp4" },
+                { src: "/bg.webm", type: "video/webm" },
+            ].forEach((s) => {
+                const source = document.createElement("source");
+                source.src = s.src;
+                source.type = s.type;
+                video.appendChild(source);
+            });
+
+            video.load();
+
+            let playing = false;
+            let lastFrame = 0;
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener("resize", resizeCanvas);
+            resizeCanvas();
+
+            function drawFrame(time) {
+                if (video.readyState >= 2) {
+                    const cw = canvas.width,
+                        ch = canvas.height;
+                    const vw = video.videoWidth,
+                        vh = video.videoHeight;
+
+                    if (vw && vh) {
+                        const vr = vw / vh,
+                            cr = cw / ch;
+                        let sx, sy, sw, sh;
+                        if (vr > cr) {
+                            sh = vh;
+                            sw = vh * cr;
+                            sx = (vw - sw) / 2;
+                            sy = 0;
+                        } else {
+                            sw = vw;
+                            sh = vw / cr;
+                            sx = 0;
+                            sy = (vh - sh) / 2;
+                        }
+                        ctx.drawImage(
+                            video,
+                            sx,
+                            sy,
+                            sw,
+                            sh,
+                            0,
+                            0,
+                            cw,
+                            ch,
+                        );
+                    }
+
+                    if (!playing) {
+                        if (lastFrame === 0) lastFrame = time;
+                        const dt = (time - lastFrame) / 1000;
+                        lastFrame = time;
+                        if (dt > 0 && dt < 1) {
+                            video.currentTime += dt;
+                            if (video.currentTime >= video.duration) {
+                                video.currentTime = 0;
+                            }
+                        }
+                    } else {
+                        lastFrame = 0;
+                    }
+                }
+                requestAnimationFrame(drawFrame);
+            }
+
+            video.addEventListener("play", () => {
+                playing = true;
+            });
+            video.addEventListener("pause", () => {
+                playing = false;
+            });
+
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(() => {});
+            }
+
+            requestAnimationFrame(drawFrame);
             items.forEach((item) => {
                 item.addEventListener("click", () => {
                     const target = item.getAttribute("data-view");
