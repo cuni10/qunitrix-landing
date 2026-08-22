@@ -738,14 +738,12 @@ import "../styles/global.css";
                 glassPanel.style.top = "";
                 glassPanel.style.transform = "";
                 void glassPanel.offsetHeight;
-                const r = glassPanel.getBoundingClientRect();
-                baseLeft = r.left;
-                baseTop = r.top;
-                panelW = r.width;
-                panelH = r.height;
+                panelW = glassPanel.offsetWidth;
+                panelH = glassPanel.offsetHeight;
+                baseLeft = (window.innerWidth - panelW) / 2;
+                baseTop = (window.innerHeight - panelH) / 2;
                 glassPanel.style.left = baseLeft + "px";
                 glassPanel.style.top = baseTop + "px";
-                glassPanel.style.transform = "none";
             }
             initPanel();
             window.addEventListener("resize", initPanel);
