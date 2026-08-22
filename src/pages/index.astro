@@ -723,6 +723,10 @@ import "../styles/global.css";
             const glassPanel = document.querySelector(".glass-panel");
             let panelOx = 0,
                 panelOy = 0;
+            let baseLeft = 0,
+                baseTop = 0,
+                panelW = 0,
+                panelH = 0;
             let dragState = null;
 
             function getPos(e) {
@@ -737,14 +741,22 @@ import "../styles/global.css";
                 glassPanel.style.transform = "";
                 void glassPanel.offsetHeight;
                 const r = glassPanel.getBoundingClientRect();
-                glassPanel.style.left = r.left + "px";
-                glassPanel.style.top = r.top + "px";
+                baseLeft = r.left;
+                baseTop = r.top;
+                panelW = r.width;
+                panelH = r.height;
+                glassPanel.style.left = baseLeft + "px";
+                glassPanel.style.top = baseTop + "px";
                 glassPanel.style.transform = "none";
                 panelOx = 0;
                 panelOy = 0;
             }
             initPanel();
             window.addEventListener("resize", initPanel);
+
+            function clamp(val, min, max) {
+                return Math.max(min, Math.min(val, max));
+            }
 
             glassPanel.addEventListener("mousedown", function (e) {
                 if (window.innerWidth <= 600) return;
@@ -780,48 +792,28 @@ import "../styles/global.css";
                 { passive: false },
             );
 
-            document.addEventListener("mousemove", function (e) {
+            function applyDrag(e) {
                 if (!dragState) return;
                 const pos = getPos(e);
                 let nx = dragState.pox + (pos.x - dragState.sx);
                 let ny = dragState.poy + (pos.y - dragState.sy);
-                const r = glassPanel.getBoundingClientRect();
-                const pw = r.width,
-                    ph = r.height;
-                const minX = -(r.left - nx);
-                const maxX = window.innerWidth - (r.left + nx) - pw;
-                const minY = -(r.top - ny);
-                const maxY = window.innerHeight - (r.top + ny) - ph;
-                nx = Math.max(-r.left + 20, Math.min(nx, window.innerWidth - r.left - pw + 20));
-                ny = Math.max(-r.top + 20, Math.min(ny, window.innerHeight - r.top - ph + 20));
-                panelOx = nx;
-                panelOy = ny;
+                const minX = -baseLeft + 20;
+                const maxX = window.innerWidth - baseLeft - panelW - 20;
+                const minY = -baseTop + 20;
+                const maxY = window.innerHeight - baseTop - panelH - 20;
+                panelOx = clamp(nx, minX, maxX);
+                panelOy = clamp(ny, minY, maxY);
                 glassPanel.style.transform =
                     "translate(" + panelOx + "px," + panelOy + "px)";
-            });
+            }
+
+            document.addEventListener("mousemove", applyDrag);
 
             document.addEventListener("mouseup", function () {
                 dragState = null;
             });
 
-            document.addEventListener(
-                "touchmove",
-                function (e) {
-                    if (!dragState) return;
-                    const pos = getPos(e);
-                    let nx = dragState.pox + (pos.x - dragState.sx);
-                    let ny = dragState.poy + (pos.y - dragState.sy);
-                    const r = glassPanel.getBoundingClientRect();
-                    const pw = r.width,
-                        ph = r.height;
-                    nx = Math.max(-r.left + 20, Math.min(nx, window.innerWidth - r.left - pw + 20));
-                    ny = Math.max(-r.top + 20, Math.min(ny, window.innerHeight - r.top - ph + 20));
-                    panelOx = nx;
-                    panelOy = ny;
-                    glassPanel.style.transform =
-                        "translate(" + panelOx + "px," + panelOy + "px)";
-                },
-                { passive: false },
+            document.addEventListener("touchmove", applyDrag, { passive: false });
             );
 
             document.addEventListener("touchend", function () {
