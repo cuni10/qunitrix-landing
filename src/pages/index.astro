@@ -783,8 +783,19 @@ import "../styles/global.css";
             document.addEventListener("mousemove", function (e) {
                 if (!dragState) return;
                 const pos = getPos(e);
-                panelOx = dragState.pox + (pos.x - dragState.sx);
-                panelOy = dragState.poy + (pos.y - dragState.sy);
+                let nx = dragState.pox + (pos.x - dragState.sx);
+                let ny = dragState.poy + (pos.y - dragState.sy);
+                const r = glassPanel.getBoundingClientRect();
+                const pw = r.width,
+                    ph = r.height;
+                const minX = -(r.left - nx);
+                const maxX = window.innerWidth - (r.left + nx) - pw;
+                const minY = -(r.top - ny);
+                const maxY = window.innerHeight - (r.top + ny) - ph;
+                nx = Math.max(-r.left + 20, Math.min(nx, window.innerWidth - r.left - pw + 20));
+                ny = Math.max(-r.top + 20, Math.min(ny, window.innerHeight - r.top - ph + 20));
+                panelOx = nx;
+                panelOy = ny;
                 glassPanel.style.transform =
                     "translate(" + panelOx + "px," + panelOy + "px)";
             });
@@ -798,8 +809,15 @@ import "../styles/global.css";
                 function (e) {
                     if (!dragState) return;
                     const pos = getPos(e);
-                    panelOx = dragState.pox + (pos.x - dragState.sx);
-                    panelOy = dragState.poy + (pos.y - dragState.sy);
+                    let nx = dragState.pox + (pos.x - dragState.sx);
+                    let ny = dragState.poy + (pos.y - dragState.sy);
+                    const r = glassPanel.getBoundingClientRect();
+                    const pw = r.width,
+                        ph = r.height;
+                    nx = Math.max(-r.left + 20, Math.min(nx, window.innerWidth - r.left - pw + 20));
+                    ny = Math.max(-r.top + 20, Math.min(ny, window.innerHeight - r.top - ph + 20));
+                    panelOx = nx;
+                    panelOy = ny;
                     glassPanel.style.transform =
                         "translate(" + panelOx + "px," + panelOy + "px)";
                 },
