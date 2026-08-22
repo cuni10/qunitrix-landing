@@ -8,14 +8,7 @@ import "../styles/global.css";
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Qunitrix</title>
-        <link rel="icon" type="image/svg+xml" href="/Logo_V5.svg" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
-        <link
-            rel="apple-touch-icon"
-            sizes="180x180"
-            href="/apple-touch-icon.png"
-        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
@@ -167,7 +160,7 @@ import "../styles/global.css";
                                     class="logo-piece piece-e"
                                 >
                                     <polyline
-                                        points="797.04 797.04 226.96 404.02 226.96 797.04 797.04 797.04"
+                                        points="797.04 797.04 226.96 587.32 226.96 797.04 797.04 797.04"
                                     ></polyline>
                                 </g>
                                 <g
@@ -658,7 +651,7 @@ import "../styles/global.css";
                 rctx = new SmallPRNG(+new Date()),
                 perlin = new Perlin(),
                 monitor = new MouseMonitor(),
-                hue = 120,
+                hue = 75,
                 particles = [],
                 resize,
                 width,
@@ -697,7 +690,7 @@ import "../styles/global.css";
                 context.strokeStyle = "hsla(" + hue + ", 75%, 50%, .55)";
                 context.stroke();
                 context.closePath();
-                hue = hue + 0.5 > 180 ? 120 : hue + 0.5;
+                hue = hue + 0.5 > 80 ? 70 : hue + 0.5;
             })();
             items.forEach((item) => {
                 item.addEventListener("click", () => {

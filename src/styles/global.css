@@ -1,10 +1,10 @@
 :root {
-    --green: #00ff88;
-    --green-dim: rgba(0, 255, 136, 0.15);
-    --green-glow: rgba(0, 255, 136, 0.3);
-    --glass-bg: rgba(0, 0, 0, 0.6);
-    --glass-border: rgba(255, 255, 255, 0.12);
-    --shine: rgba(255, 255, 255, 0.15);
+    --green: #ccff11;
+    --green-dim: rgba(204, 255, 17, 0.15);
+    --green-glow: rgba(204, 255, 17, 0.3);
+    --glass-bg: rgba(6, 29, 34, 0.7);
+    --glass-border: rgba(204, 255, 17, 0.12);
+    --shine: rgba(204, 255, 17, 0.1);
 }
 
 * {
@@ -15,7 +15,7 @@
 
 body {
     font-family: "Space Grotesk", sans-serif;
-    background: #050505;
+    background: #061d22;
     color: #fff;
     min-height: 100vh;
     overflow-x: hidden;
@@ -26,9 +26,9 @@ body {
 #logo-clickable polygon,
 #logo-clickable rect,
 #logo-clickable polyline {
-    fill: white;
+    fill: #ccff11;
     stroke-width: 5px;
-    stroke: white;
+    stroke: #ccff11;
 }
 
 /* VIDEO DE FONDO */
@@ -261,22 +261,7 @@ video::-webkit-media-controls {
     color: white;
 }
 
-.logo-blur {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    -webkit-mask-image: url(/Logo_V5.svg);
-    mask-image: url(/Logo_V5.svg);
-    -webkit-mask-size: contain;
-    mask-size: contain;
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-    mask-position: center;
-    pointer-events: none;
-}
+
 
 .view .logo-img {
     max-width: clamp(200px, 25vw, 350px);
@@ -296,10 +281,10 @@ video::-webkit-media-controls {
     letter-spacing: 0.3em;
     text-transform: uppercase;
     text-align: center;
-    color: #00ff88;
+    color: #ccff11;
     text-shadow:
-        0 0 20px rgba(0, 255, 136, 0.5),
-        0 0 40px rgba(0, 255, 136, 0.3);
+        0 0 20px rgba(204, 255, 17, 0.5),
+        0 0 40px rgba(204, 255, 17, 0.3);
     user-select: none;
     -webkit-user-select: none;
 }
@@ -311,7 +296,7 @@ video::-webkit-media-controls {
     text-align: center;
     margin-bottom: 2rem;
     letter-spacing: 0.1em;
-    text-shadow: 0 0 20px #050505;
+    text-shadow: 0 0 20px #061d22;
 }
 
 .project-card {
@@ -466,7 +451,7 @@ video::-webkit-media-controls {
 
 .social-link:hover {
     background: var(--green);
-    color: #000;
+    color: #061d22;
 }
 
 @media (max-width: 600px) {
