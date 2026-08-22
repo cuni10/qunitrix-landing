@@ -614,7 +614,7 @@ import "../styles/global.css";
                     yy = this.p.y / 200,
                     zz = Date.now() / 5000,
                     a = this.r.random() * Math.Tau,
-                    rnd = this.r.random() / 4;
+                    rnd = this.r.random() / 10;
                 this.v.x += rnd * Math.sin(a) + this.g.simplex3d(xx, yy, -zz);
                 this.v.y += rnd * Math.cos(a) + this.g.simplex3d(xx, yy, zz);
                 if (this.m.state.left) {
@@ -669,7 +669,7 @@ import "../styles/global.css";
             resize();
             window.addEventListener("resize", resize);
 
-            for (var i = 0; i < 5000; i += 1) {
+            for (var i = 0; i < 3500; i += 1) {
                 particles.push(new Particle(perlin, bounds, rctx, monitor));
             }
 
