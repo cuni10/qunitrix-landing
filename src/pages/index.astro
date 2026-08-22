@@ -755,8 +755,8 @@ import "../styles/global.css";
             function applyDrag(e) {
                 if (!dragState) return;
                 const pos = getPos(e);
-                let newLeft = baseLeft + (pos.x - dragState.sx);
-                let newTop = baseTop + (pos.y - dragState.sy);
+                let newLeft = dragState.panelLeft + (pos.x - dragState.sx);
+                let newTop = dragState.panelTop + (pos.y - dragState.sy);
                 newLeft = clamp(newLeft, 20, window.innerWidth - panelW - 20);
                 newTop = clamp(newTop, 20, window.innerHeight - panelH - 20);
                 glassPanel.style.left = newLeft + "px";
@@ -768,7 +768,12 @@ import "../styles/global.css";
                 if (e.target.closest(".dock-item, button, a, .project-card"))
                     return;
                 const pos = getPos(e);
-                dragState = { sx: pos.x, sy: pos.y };
+                dragState = {
+                    sx: pos.x,
+                    sy: pos.y,
+                    panelLeft: parseFloat(glassPanel.style.left),
+                    panelTop: parseFloat(glassPanel.style.top),
+                };
                 e.stopPropagation();
             });
 
@@ -781,7 +786,12 @@ import "../styles/global.css";
                     )
                         return;
                     const pos = getPos(e);
-                    dragState = { sx: pos.x, sy: pos.y };
+                    dragState = {
+                        sx: pos.x,
+                        sy: pos.y,
+                        panelLeft: parseFloat(glassPanel.style.left),
+                        panelTop: parseFloat(glassPanel.style.top),
+                    };
                     e.stopPropagation();
                 },
                 { passive: false },
