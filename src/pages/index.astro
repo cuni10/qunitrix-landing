@@ -721,8 +721,6 @@ import "../styles/global.css";
             }, 1500);
 
             const glassPanel = document.querySelector(".glass-panel");
-            let panelOx = 0,
-                panelOy = 0;
             let baseLeft = 0,
                 baseTop = 0,
                 panelW = 0,
@@ -748,8 +746,6 @@ import "../styles/global.css";
                 glassPanel.style.left = baseLeft + "px";
                 glassPanel.style.top = baseTop + "px";
                 glassPanel.style.transform = "none";
-                panelOx = 0;
-                panelOy = 0;
             }
             initPanel();
             window.addEventListener("resize", initPanel);
@@ -758,17 +754,23 @@ import "../styles/global.css";
                 return Math.max(min, Math.min(val, max));
             }
 
+            function applyDrag(e) {
+                if (!dragState) return;
+                const pos = getPos(e);
+                let newLeft = baseLeft + (pos.x - dragState.sx);
+                let newTop = baseTop + (pos.y - dragState.sy);
+                newLeft = clamp(newLeft, 20, window.innerWidth - panelW - 20);
+                newTop = clamp(newTop, 20, window.innerHeight - panelH - 20);
+                glassPanel.style.left = newLeft + "px";
+                glassPanel.style.top = newTop + "px";
+            }
+
             glassPanel.addEventListener("mousedown", function (e) {
                 if (window.innerWidth <= 600) return;
                 if (e.target.closest(".dock-item, button, a, .project-card"))
                     return;
                 const pos = getPos(e);
-                dragState = {
-                    sx: pos.x,
-                    sy: pos.y,
-                    pox: panelOx,
-                    poy: panelOy,
-                };
+                dragState = { sx: pos.x, sy: pos.y };
                 e.stopPropagation();
             });
 
@@ -781,38 +783,16 @@ import "../styles/global.css";
                     )
                         return;
                     const pos = getPos(e);
-                    dragState = {
-                        sx: pos.x,
-                        sy: pos.y,
-                        pox: panelOx,
-                        poy: panelOy,
-                    };
+                    dragState = { sx: pos.x, sy: pos.y };
                     e.stopPropagation();
                 },
                 { passive: false },
             );
 
-            function applyDrag(e) {
-                if (!dragState) return;
-                const pos = getPos(e);
-                let nx = dragState.pox + (pos.x - dragState.sx);
-                let ny = dragState.poy + (pos.y - dragState.sy);
-                const minX = -baseLeft + 20;
-                const maxX = window.innerWidth - baseLeft - panelW - 20;
-                const minY = -baseTop + 20;
-                const maxY = window.innerHeight - baseTop - panelH - 20;
-                panelOx = clamp(nx, minX, maxX);
-                panelOy = clamp(ny, minY, maxY);
-                glassPanel.style.transform =
-                    "translate(" + panelOx + "px," + panelOy + "px)";
-            }
-
             document.addEventListener("mousemove", applyDrag);
-
             document.addEventListener("mouseup", function () {
                 dragState = null;
             });
-
             document.addEventListener("touchmove", applyDrag, { passive: false });
             );
 
