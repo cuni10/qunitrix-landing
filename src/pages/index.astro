@@ -746,6 +746,7 @@ import "../styles/global.css";
             window.addEventListener("resize", initPanel);
 
             glassPanel.addEventListener("mousedown", function (e) {
+                if (window.innerWidth <= 600) return;
                 if (e.target.closest(".dock-item, button, a, .project-card"))
                     return;
                 const pos = getPos(e);
@@ -761,6 +762,7 @@ import "../styles/global.css";
             glassPanel.addEventListener(
                 "touchstart",
                 function (e) {
+                    if (window.innerWidth <= 600) return;
                     if (
                         e.target.closest(".dock-item, button, a, .project-card")
                     )

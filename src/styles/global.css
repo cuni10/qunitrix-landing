@@ -457,7 +457,10 @@ video::-webkit-media-controls {
 @media (max-width: 600px) {
     .social-links {
         top: 1rem;
-        left: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        justify-content: center;
         gap: 0.25rem;
     }
 
