@@ -757,8 +757,12 @@ import "../styles/global.css";
                 const pos = getPos(e);
                 let newLeft = dragState.panelLeft + (pos.x - dragState.sx);
                 let newTop = dragState.panelTop + (pos.y - dragState.sy);
-                newLeft = clamp(newLeft, 20, window.innerWidth - panelW - 20);
-                newTop = clamp(newTop, 20, window.innerHeight - panelH - 20);
+                const minX = window.innerWidth * 0.15;
+                const maxX = window.innerWidth * 0.85 - panelW;
+                const minY = window.innerHeight * 0.15;
+                const maxY = window.innerHeight * 0.85 - panelH;
+                newLeft = clamp(newLeft, minX, maxX);
+                newTop = clamp(newTop, minY, maxY);
                 glassPanel.style.left = newLeft + "px";
                 glassPanel.style.top = newTop + "px";
             }
