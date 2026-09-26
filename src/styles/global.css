@@ -35,7 +35,7 @@ body {
 .bg-static {
     position: fixed;
     inset: 0;
-    z-index: -2;
+    z-index: -3;
     width: 100%;
     height: 100%;
     background: url(/bg-poster.jpg) center/cover no-repeat;
@@ -44,10 +44,24 @@ body {
 .bg-video {
     position: fixed;
     inset: 0;
-    z-index: -1;
+    z-index: -2;
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+.bg-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: rgba(0, 0, 0, 0.734);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+body.low-perf .bg-overlay {
+    opacity: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -55,7 +69,7 @@ body {
         display: none;
     }
     .bg-static {
-        z-index: -1;
+        z-index: -2;
     }
 }
 
@@ -76,6 +90,10 @@ video::-webkit-media-controls {
     width: 100%;
     height: 100%;
     pointer-events: none;
+}
+
+body.low-perf .particle-overlay {
+    display: none !important;
 }
 
 /* SVG FILTERS */

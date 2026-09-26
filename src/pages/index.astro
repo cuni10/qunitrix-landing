@@ -67,6 +67,7 @@ import "../styles/global.css";
         <video class="bg-video" autoplay muted loop playsinline>
             <source src="/bg.mp4#t=0.001" type="video/mp4" />
         </video>
+        <div class="bg-overlay"></div>
         <canvas id="particle-canvas" class="particle-overlay"></canvas>
 
         <div class="social-links">
@@ -99,8 +100,8 @@ import "../styles/global.css";
                     <button class="dock-item active" data-view="inicio"
                         >Inicio</button
                     >
-                    <button class="dock-item" data-view="proyectos"
-                        >Proyectos</button
+                    <button class="dock-item" data-view="servicios"
+                        >Servicios</button
                     >
                 </div>
             </div>
@@ -220,8 +221,8 @@ import "../styles/global.css";
                         <p class="subtitle">Software</p>
                     </div>
 
-                    <div id="view-proyectos" class="view">
-                        <h2 class="section-title">Proyectos</h2>
+                    <div id="view-servicios" class="view">
+                        <h2 class="section-title">Servicios</h2>
                         <div class="projects-grid">
                             <a
                                 href="https://stockapp.qunitrix.com"
@@ -679,53 +680,176 @@ import "../styles/global.css";
                 context.lineTo(this.p.x, this.p.y);
             };
 
-            var canvas = document.getElementById("particle-canvas"),
-                context = canvas.getContext("2d"),
-                rctx = new SmallPRNG(+new Date()),
-                perlin = new Perlin(),
-                monitor = new MouseMonitor(),
-                hue = 75,
-                particles = [],
-                resize,
-                width,
-                height,
-                bounds = new Vector3D(0, 0, 0);
+            // ─── Particle Swarm Background & Low Performance Detection ───
+            var canvas = document.getElementById("particle-canvas");
 
-            perlin.init(function () {
-                return rctx.random(0, 255);
-            });
+            function checkLowPerformanceMode() {
+                // 1. URL parameter override: ?perf=low o ?perf=high
+                try {
+                    const params = new URLSearchParams(window.location.search);
+                    const perf = params.get("perf");
+                    if (perf === "high") {
+                        return { isLowPerf: false, reason: "Forzado por ?perf=high" };
+                    }
+                    if (perf === "low") {
+                        return { isLowPerf: true, reason: "Forzado por ?perf=low" };
+                    }
+                } catch (_) {}
 
-            resize = function () {
-                canvas.width = width = bounds.x = window.innerWidth;
-                canvas.height = height = bounds.y = window.innerHeight;
-            };
-            resize();
-            window.addEventListener("resize", resize);
+                // 2. Accessibility: prefers-reduced-motion
+                if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+                    return { isLowPerf: true, reason: "Preferencia de reducción de movimiento activa" };
+                }
 
-            for (var i = 0; i < 3500; i += 1) {
-                particles.push(new Particle(perlin, bounds, rctx, monitor));
+                // 3. Data saver mode
+                if (navigator.connection && navigator.connection.saveData) {
+                    return { isLowPerf: true, reason: "Modo ahorro de datos activo" };
+                }
+
+                // 4. Low CPU core count (<= 2 cores)
+                if (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2) {
+                    return { isLowPerf: true, reason: "Dispositivo de bajo rendimiento (<= 2 núcleos CPU)" };
+                }
+
+                // 5. Low Device RAM (<= 2GB)
+                if (navigator.deviceMemory && navigator.deviceMemory <= 2) {
+                    return { isLowPerf: true, reason: "Memoria RAM baja detectada (<= 2GB)" };
+                }
+
+                // 6. Hardware acceleration detection (WebGL disabled or software fallback)
+                try {
+                    const testCanvas = document.createElement("canvas");
+                    testCanvas.width = 1;
+                    testCanvas.height = 1;
+                    const gl = testCanvas.getContext("webgl") || testCanvas.getContext("experimental-webgl");
+                    if (!gl) {
+                        return { isLowPerf: true, reason: "Aceleración de hardware desactivada (WebGL no disponible)" };
+                    }
+                    const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
+                    if (debugInfo) {
+                        const renderer = (gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || "").toLowerCase();
+                        const vendor = (gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) || "").toLowerCase();
+                        const softwareRenderers = [
+                            "swiftshader",
+                            "llvmpipe",
+                            "software",
+                            "microsoft basic render",
+                            "software rasterizer",
+                            "mesa",
+                            "gdi generic",
+                            "cpu"
+                        ];
+                        for (const sw of softwareRenderers) {
+                            if (renderer.includes(sw) || vendor.includes(sw)) {
+                                return { isLowPerf: true, reason: `Renderizado por software detectado (${renderer})` };
+                            }
+                        }
+                    }
+                } catch (e) {
+                    return { isLowPerf: true, reason: "Sin aceleración de hardware disponible" };
+                }
+
+                return { isLowPerf: false };
             }
 
-            (function render() {
-                requestAnimationFrame(render);
-                context.globalCompositeOperation = "source-over";
-                context.fillStyle = "rgba(0, 0, 0, .1)";
-                context.fillRect(0, 0, width, height);
-                context.globalCompositeOperation = "destination-out";
-                context.fillStyle = "rgba(0, 0, 0, .035)";
-                context.fillRect(0, 0, width, height);
-                context.globalCompositeOperation = "lighter";
-                context.beginPath();
-                for (var i = 0; i < particles.length; i += 1) {
-                    particles[i].step();
-                    particles[i].render(context);
+            const lowPerfCheck = checkLowPerformanceMode();
+
+            if (lowPerfCheck.isLowPerf) {
+                document.body.classList.add("low-perf");
+                if (canvas) canvas.style.display = "none";
+                console.info("[Qunitrix] Modo bajo rendimiento activado: " + lowPerfCheck.reason + ". Partículas desactivadas.");
+            } else {
+                var context = canvas.getContext("2d"),
+                    rctx = new SmallPRNG(+new Date()),
+                    perlin = new Perlin(),
+                    monitor = new MouseMonitor(),
+                    hue = 75,
+                    particles = [],
+                    resize,
+                    width,
+                    height,
+                    bounds = new Vector3D(0, 0, 0);
+
+                perlin.init(function () {
+                    return rctx.random(0, 255);
+                });
+
+                resize = function () {
+                    canvas.width = width = bounds.x = window.innerWidth;
+                    canvas.height = height = bounds.y = window.innerHeight;
+                };
+                resize();
+                window.addEventListener("resize", resize);
+
+                // Use fewer particles on mobile/touch screens to ensure smooth 60fps
+                const isMobileScreen = window.innerWidth <= 600 || (navigator.maxTouchPoints && navigator.maxTouchPoints > 1);
+                const count = isMobileScreen ? 1200 : 3500;
+
+                for (var i = 0; i < count; i += 1) {
+                    particles.push(new Particle(perlin, bounds, rctx, monitor));
                 }
-                context.strokeStyle = "hsla(" + hue + ", 75%, 50%, .55)";
-                context.stroke();
-                context.closePath();
-                hue = hue + 0.5 > 80 ? 70 : hue + 0.5;
-            })();
+
+                let animId = null;
+                let frameCount = 0;
+                let lastTime = performance.now();
+                let slowFrames = 0;
+                const warmupFrames = 60;
+
+                function stopParticles(reason) {
+                    if (animId) {
+                        cancelAnimationFrame(animId);
+                        animId = null;
+                    }
+                    document.body.classList.add("low-perf");
+                    if (canvas) {
+                        canvas.style.display = "none";
+                        if (context) context.clearRect(0, 0, canvas.width, canvas.height);
+                    }
+                    window.removeEventListener("resize", resize);
+                    console.info("[Qunitrix] Modo bajo rendimiento activado: " + reason + ". Partículas desactivadas.");
+                }
+
+                function render(now) {
+                    if (now && lastTime) {
+                        const delta = now - lastTime;
+                        if (frameCount > 5 && frameCount <= warmupFrames) {
+                            if (delta > 35) {
+                                slowFrames++;
+                            }
+                            if (frameCount === warmupFrames && slowFrames > 12) {
+                                stopParticles("Caída de cuadros por segundo detectada en tiempo real (< 30 FPS)");
+                                return;
+                            }
+                        }
+                        frameCount++;
+                    }
+                    lastTime = now || performance.now();
+
+                    context.globalCompositeOperation = "source-over";
+                    context.fillStyle = "rgba(0, 0, 0, .1)";
+                    context.fillRect(0, 0, width, height);
+                    context.globalCompositeOperation = "destination-out";
+                    context.fillStyle = "rgba(0, 0, 0, .035)";
+                    context.fillRect(0, 0, width, height);
+                    context.globalCompositeOperation = "lighter";
+                    context.beginPath();
+                    for (var i = 0; i < particles.length; i += 1) {
+                        particles[i].step();
+                        particles[i].render(context);
+                    }
+                    context.strokeStyle = "hsla(" + hue + ", 75%, 50%, .55)";
+                    context.stroke();
+                    context.closePath();
+                    hue = hue + 0.5 > 80 ? 70 : hue + 0.5;
+
+                    animId = requestAnimationFrame(render);
+                }
+
+                animId = requestAnimationFrame(render);
+            }
+
             function switchView(target) {
+                if (target === "proyectos") target = "servicios";
                 const targetBtn = document.querySelector(`.dock-item[data-view="${target}"]`);
                 const targetView = document.getElementById("view-" + target);
                 if (!targetBtn || !targetView) return;
