@@ -222,19 +222,47 @@ import "../styles/global.css";
 
                     <div id="view-proyectos" class="view">
                         <h2 class="section-title">Proyectos</h2>
-                        <a
-                            href="https://stockapp.qunitrix.com"
-                            class="project-card"
-                            target="_blank"
-                            rel="noopener"
-                        >
-                            <img
-                                src="/faviconStockApp.ico"
-                                alt=""
-                                class="project-icon"
-                            />
-                            <h3>StockApp</h3>
-                        </a>
+                        <div class="projects-grid">
+                            <a
+                                href="https://stockapp.qunitrix.com"
+                                class="project-card"
+                                target="_blank"
+                                rel="noopener"
+                            >
+                                <img
+                                    src="/faviconStockApp.ico"
+                                    alt="StockApp"
+                                    class="project-icon"
+                                />
+                                <h3>StockApp</h3>
+                            </a>
+                            <a
+                                href="https://kanban.qunitrix.com/"
+                                class="project-card"
+                                target="_blank"
+                                rel="noopener"
+                            >
+                                <img
+                                    src="/favicon.ico"
+                                    alt="Kanban"
+                                    class="project-icon"
+                                />
+                                <h3>Kanban</h3>
+                            </a>
+                            <a
+                                href="https://video.qunitrix.com/"
+                                class="project-card"
+                                target="_blank"
+                                rel="noopener"
+                            >
+                                <img
+                                    src="/favicon.ico"
+                                    alt="Video"
+                                    class="project-icon"
+                                />
+                                <h3>Video</h3>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -697,18 +725,32 @@ import "../styles/global.css";
                 context.closePath();
                 hue = hue + 0.5 > 80 ? 70 : hue + 0.5;
             })();
+            function switchView(target) {
+                const targetBtn = document.querySelector(`.dock-item[data-view="${target}"]`);
+                const targetView = document.getElementById("view-" + target);
+                if (!targetBtn || !targetView) return;
+
+                items.forEach((i) => i.classList.remove("active"));
+                targetBtn.classList.add("active");
+
+                views.forEach((v) => v.classList.remove("active"));
+                targetView.classList.add("active");
+            }
+
             items.forEach((item) => {
                 item.addEventListener("click", () => {
                     const target = item.getAttribute("data-view");
-
-                    items.forEach((i) => i.classList.remove("active"));
-                    item.classList.add("active");
-
-                    views.forEach((v) => v.classList.remove("active"));
-                    document
-                        .getElementById("view-" + target)
-                        .classList.add("active");
+                    switchView(target);
                 });
+            });
+
+            if (window.location.hash) {
+                const hash = window.location.hash.replace("#", "");
+                switchView(hash);
+            }
+            window.addEventListener("hashchange", () => {
+                const hash = window.location.hash.replace("#", "");
+                switchView(hash);
             });
 
             const pieces = document.querySelectorAll(".logo-piece");
@@ -734,6 +776,12 @@ import "../styles/global.css";
             }
 
             function initPanel() {
+                if (window.innerWidth <= 600) {
+                    glassPanel.style.left = "";
+                    glassPanel.style.top = "";
+                    glassPanel.style.transform = "";
+                    return;
+                }
                 glassPanel.style.left = "";
                 glassPanel.style.top = "";
                 glassPanel.style.transform = "";

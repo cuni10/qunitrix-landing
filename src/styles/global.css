@@ -122,13 +122,13 @@ video::-webkit-media-controls {
     overflow: hidden;
     border-radius: 2rem;
     cursor: default;
-    transition: min-height 0.4s ease;
+    transition: min-height 0.4s ease, width 0.4s ease;
     box-shadow:
         0 6px 6px rgba(0, 0, 0, 0.2),
         0 0 20px rgba(0, 0, 0, 0.1);
     min-width: 400px;
     min-height: 300px;
-    width: min(480px, calc(100vw - 2rem));
+    width: min(560px, calc(100vw - 2rem));
 }
 
 .glass-panel .glass-effect {
@@ -314,14 +314,23 @@ video::-webkit-media-controls {
     text-shadow: 0 0 20px #061d22;
 }
 
+.projects-grid {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+}
+
 .project-card {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 0.8rem;
     text-decoration: none;
     position: relative;
-    padding: 1.5rem 2.5rem;
+    padding: 1.5rem 1.25rem;
     border-radius: 1.5rem;
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.18);
@@ -331,8 +340,8 @@ video::-webkit-media-controls {
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
     cursor: pointer;
     text-align: center;
-    max-width: 400px;
-    margin: 0 auto;
+    flex: 1 1 120px;
+    max-width: 140px;
 }
 
 .project-card h3 {
@@ -341,32 +350,56 @@ video::-webkit-media-controls {
     letter-spacing: 0.05em;
     opacity: 0.8;
     color: #fff;
+    transition: opacity 0.3s ease, color 0.3s ease;
 }
 
 .project-icon {
-    width: 80px;
-    height: 80px;
+    width: 68px;
+    height: 68px;
     display: block;
+    object-fit: contain;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 2.2);
 }
 
 .project-card:hover {
-    transform: translateY(-4px) scale(1.02);
-    border-color: rgba(255, 255, 255, 0.35);
+    transform: translateY(-4px) scale(1.04);
+    border-color: rgba(204, 255, 17, 0.45);
     background: rgba(0, 0, 0, 0.45);
     box-shadow:
         inset -2px -2px 2px rgba(0, 0, 0, 0.15),
-        0 0 40px rgba(255, 255, 255, 0.06);
+        0 0 30px rgba(204, 255, 17, 0.15);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
 }
 
+.project-card:hover .project-icon {
+    transform: scale(1.08);
+}
+
+.project-card:hover h3 {
+    opacity: 1;
+    color: var(--green);
+}
+
 @media (max-width: 600px) {
-    .view {
-        padding: 1.5rem 1.5rem;
+    .main-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
     }
 
     .glass-panel {
-        min-width: 300px;
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        width: 100% !important;
+        max-width: 440px !important;
+        min-width: 0 !important;
+    }
+
+    .view {
+        padding: 1.5rem 0.8rem;
     }
 
     .dock {
@@ -378,8 +411,24 @@ video::-webkit-media-controls {
         font-size: 0.85rem;
     }
 
+    .projects-grid {
+        gap: 0.5rem;
+    }
+
     .project-card {
-        padding: 2rem 3rem;
+        padding: 1rem 0.4rem;
+        flex: 1 1 80px;
+        min-width: 0;
+        max-width: 105px;
+    }
+
+    .project-icon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .project-card h3 {
+        font-size: 0.8rem;
     }
 }
 
