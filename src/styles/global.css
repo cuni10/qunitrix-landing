@@ -109,11 +109,6 @@ body.low-perf .particle-overlay {
     inset: 0;
 }
 
-.glass-panel {
-    position: absolute;
-    max-width: min(100%, calc(100vw - 2rem));
-}
-
 /* VIEWS */
 .view {
     display: none;
@@ -137,16 +132,30 @@ body.low-perf .particle-overlay {
 
 /* LIQUID GLASS BASE */
 .glass-panel {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     overflow: hidden;
     border-radius: 2rem;
     cursor: default;
-    transition: min-height 0.4s ease, width 0.4s ease;
+    transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                min-height 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow:
         0 6px 6px rgba(0, 0, 0, 0.2),
         0 0 20px rgba(0, 0, 0, 0.1);
-    min-width: 400px;
+    min-width: 320px;
     min-height: 300px;
+    width: min(420px, calc(100vw - 2rem));
+    max-width: min(100%, calc(100vw - 2rem));
+}
+
+.glass-panel.mode-servicios {
     width: min(560px, calc(100vw - 2rem));
+}
+
+.glass-panel.is-dragging {
+    transition: none !important;
 }
 
 .glass-panel .glass-effect {
@@ -399,6 +408,77 @@ body.low-perf .particle-overlay {
     color: var(--green);
 }
 
+/* ENTRADA ANIMADA CON DELAY PARA ICONOS DE SERVICIOS */
+#view-servicios.active .section-title {
+    animation: serviceTitleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.08s backwards;
+}
+
+#view-servicios.active .project-card {
+    animation: serviceCardIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+#view-servicios.active .project-card:nth-child(1) {
+    animation-delay: 0.18s;
+}
+
+#view-servicios.active .project-card:nth-child(2) {
+    animation-delay: 0.27s;
+}
+
+#view-servicios.active .project-card:nth-child(3) {
+    animation-delay: 0.36s;
+}
+
+#view-servicios.active .project-card:nth-child(1) .project-icon {
+    animation: serviceIconIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.22s backwards;
+}
+
+#view-servicios.active .project-card:nth-child(2) .project-icon {
+    animation: serviceIconIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.31s backwards;
+}
+
+#view-servicios.active .project-card:nth-child(3) .project-icon {
+    animation: serviceIconIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.40s backwards;
+}
+
+@keyframes serviceTitleIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes serviceCardIn {
+    0% {
+        opacity: 0;
+        transform: translateY(18px) scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes serviceIconIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.7) translateY(8px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+body.low-perf #view-servicios.active .project-card,
+body.low-perf #view-servicios.active .project-icon {
+    animation-duration: 0.25s !important;
+}
+
 @media (max-width: 600px) {
     .main-container {
         display: flex;
@@ -407,13 +487,16 @@ body.low-perf .particle-overlay {
         padding: 1rem;
     }
 
-    .glass-panel {
+    .glass-panel,
+    .glass-panel.mode-servicios {
         position: relative !important;
         left: auto !important;
         top: auto !important;
+        transform: none !important;
         width: 100% !important;
         max-width: 440px !important;
         min-width: 0 !important;
+        margin: 0 auto;
     }
 
     .view {

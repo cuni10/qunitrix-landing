@@ -848,6 +848,65 @@ import "../styles/global.css";
                 animId = requestAnimationFrame(render);
             }
 
+            const glassPanel = document.querySelector(".glass-panel");
+            let dragState = null;
+            let currentOffsetX = 0;
+            let currentOffsetY = 0;
+
+            function getPos(e) {
+                return e.touches
+                    ? { x: e.touches[0].clientX, y: e.touches[0].clientY }
+                    : { x: e.clientX, y: e.clientY };
+            }
+
+            function clamp(val, min, max) {
+                return Math.max(min, Math.min(val, max));
+            }
+
+            function updatePanelForView(target) {
+                if (!glassPanel) return;
+                if (target === "servicios") {
+                    glassPanel.classList.add("mode-servicios");
+                } else {
+                    glassPanel.classList.remove("mode-servicios");
+                }
+
+                if (window.innerWidth <= 600) return;
+
+                // Si ha sido arrastrado previamente, aseguramos que con el nuevo ancho no se desborde
+                if (currentOffsetX !== 0 || currentOffsetY !== 0) {
+                    const targetW = target === "servicios" ? 560 : 420;
+                    const maxOffsetX = Math.max(0, (window.innerWidth * 0.85 - targetW / 2) - (window.innerWidth / 2));
+                    const minOffsetX = Math.min(0, (window.innerWidth * 0.15 + targetW / 2) - (window.innerWidth / 2));
+                    currentOffsetX = clamp(currentOffsetX, minOffsetX, maxOffsetX);
+                    glassPanel.style.transform = `translate(calc(-50% + ${currentOffsetX}px), calc(-50% + ${currentOffsetY}px))`;
+                }
+            }
+
+            function initPanel() {
+                if (!glassPanel) return;
+                if (window.innerWidth <= 600) {
+                    glassPanel.style.transform = "";
+                    return;
+                }
+                const isServicios = document.getElementById("view-servicios") && document.getElementById("view-servicios").classList.contains("active");
+                if (isServicios) {
+                    glassPanel.classList.add("mode-servicios");
+                } else {
+                    glassPanel.classList.remove("mode-servicios");
+                }
+
+                if (currentOffsetX !== 0 || currentOffsetY !== 0) {
+                    const w = glassPanel.offsetWidth;
+                    const maxOffsetX = Math.max(0, (window.innerWidth * 0.85 - w / 2) - (window.innerWidth / 2));
+                    const minOffsetX = Math.min(0, (window.innerWidth * 0.15 + w / 2) - (window.innerWidth / 2));
+                    currentOffsetX = clamp(currentOffsetX, minOffsetX, maxOffsetX);
+                    glassPanel.style.transform = `translate(calc(-50% + ${currentOffsetX}px), calc(-50% + ${currentOffsetY}px))`;
+                } else {
+                    glassPanel.style.transform = "";
+                }
+            }
+
             function switchView(target) {
                 if (target === "proyectos") target = "servicios";
                 const targetBtn = document.querySelector(`.dock-item[data-view="${target}"]`);
@@ -859,6 +918,8 @@ import "../styles/global.css";
 
                 views.forEach((v) => v.classList.remove("active"));
                 targetView.classList.add("active");
+
+                updatePanelForView(target);
             }
 
             items.forEach((item) => {
@@ -870,8 +931,20 @@ import "../styles/global.css";
 
             if (window.location.hash) {
                 const hash = window.location.hash.replace("#", "");
-                switchView(hash);
+                const targetViewName = hash === "proyectos" ? "servicios" : hash;
+                const targetBtn = document.querySelector(`.dock-item[data-view="${targetViewName}"]`);
+                const targetView = document.getElementById("view-" + targetViewName);
+                if (targetBtn && targetView) {
+                    items.forEach((i) => i.classList.remove("active"));
+                    targetBtn.classList.add("active");
+                    views.forEach((v) => v.classList.remove("active"));
+                    targetView.classList.add("active");
+                }
             }
+
+            initPanel();
+            window.addEventListener("resize", initPanel);
+
             window.addEventListener("hashchange", () => {
                 const hash = window.location.hash.replace("#", "");
                 switchView(hash);
@@ -886,69 +959,33 @@ import "../styles/global.css";
                 });
             }, 1500);
 
-            const glassPanel = document.querySelector(".glass-panel");
-            let baseLeft = 0,
-                baseTop = 0,
-                panelW = 0,
-                panelH = 0;
-            let dragState = null;
-
-            function getPos(e) {
-                return e.touches
-                    ? { x: e.touches[0].clientX, y: e.touches[0].clientY }
-                    : { x: e.clientX, y: e.clientY };
-            }
-
-            function initPanel() {
-                if (window.innerWidth <= 600) {
-                    glassPanel.style.left = "";
-                    glassPanel.style.top = "";
-                    glassPanel.style.transform = "";
-                    return;
-                }
-                glassPanel.style.left = "";
-                glassPanel.style.top = "";
-                glassPanel.style.transform = "";
-                void glassPanel.offsetHeight;
-                panelW = glassPanel.offsetWidth;
-                panelH = glassPanel.offsetHeight;
-                baseLeft = (window.innerWidth - panelW) / 2;
-                baseTop = (window.innerHeight - panelH) / 2;
-                glassPanel.style.left = baseLeft + "px";
-                glassPanel.style.top = baseTop + "px";
-            }
-            initPanel();
-            window.addEventListener("resize", initPanel);
-
-            function clamp(val, min, max) {
-                return Math.max(min, Math.min(val, max));
-            }
-
             function applyDrag(e) {
                 if (!dragState) return;
                 const pos = getPos(e);
-                let newLeft = dragState.panelLeft + (pos.x - dragState.sx);
-                let newTop = dragState.panelTop + (pos.y - dragState.sy);
-                const minX = window.innerWidth * 0.15;
-                const maxX = window.innerWidth * 0.85 - panelW;
-                const minY = window.innerHeight * 0.15;
-                const maxY = window.innerHeight * 0.85 - panelH;
-                newLeft = clamp(newLeft, minX, maxX);
-                newTop = clamp(newTop, minY, maxY);
-                glassPanel.style.left = newLeft + "px";
-                glassPanel.style.top = newTop + "px";
+                let newOffsetX = dragState.startOffsetX + (pos.x - dragState.sx);
+                let newOffsetY = dragState.startOffsetY + (pos.y - dragState.sy);
+                const w = glassPanel.offsetWidth;
+                const h = glassPanel.offsetHeight;
+                const maxOffsetX = Math.max(0, (window.innerWidth * 0.85 - w / 2) - (window.innerWidth / 2));
+                const minOffsetX = Math.min(0, (window.innerWidth * 0.15 + w / 2) - (window.innerWidth / 2));
+                const maxOffsetY = Math.max(0, (window.innerHeight * 0.85 - h / 2) - (window.innerHeight / 2));
+                const minOffsetY = Math.min(0, (window.innerHeight * 0.15 + h / 2) - (window.innerHeight / 2));
+                currentOffsetX = clamp(newOffsetX, minOffsetX, maxOffsetX);
+                currentOffsetY = clamp(newOffsetY, minOffsetY, maxOffsetY);
+                glassPanel.style.transform = `translate(calc(-50% + ${currentOffsetX}px), calc(-50% + ${currentOffsetY}px))`;
             }
 
             glassPanel.addEventListener("mousedown", function (e) {
                 if (window.innerWidth <= 600) return;
                 if (e.target.closest(".dock-item, button, a, .project-card"))
                     return;
+                glassPanel.classList.add("is-dragging");
                 const pos = getPos(e);
                 dragState = {
                     sx: pos.x,
                     sy: pos.y,
-                    panelLeft: parseFloat(glassPanel.style.left),
-                    panelTop: parseFloat(glassPanel.style.top),
+                    startOffsetX: currentOffsetX,
+                    startOffsetY: currentOffsetY,
                 };
                 e.stopPropagation();
             });
@@ -961,12 +998,13 @@ import "../styles/global.css";
                         e.target.closest(".dock-item, button, a, .project-card")
                     )
                         return;
+                    glassPanel.classList.add("is-dragging");
                     const pos = getPos(e);
                     dragState = {
                         sx: pos.x,
                         sy: pos.y,
-                        panelLeft: parseFloat(glassPanel.style.left),
-                        panelTop: parseFloat(glassPanel.style.top),
+                        startOffsetX: currentOffsetX,
+                        startOffsetY: currentOffsetY,
                     };
                     e.stopPropagation();
                 },
@@ -976,11 +1014,13 @@ import "../styles/global.css";
             document.addEventListener("mousemove", applyDrag);
             document.addEventListener("mouseup", function () {
                 dragState = null;
+                glassPanel.classList.remove("is-dragging");
             });
             document.addEventListener("touchmove", applyDrag, { passive: false });
 
             document.addEventListener("touchend", function () {
                 dragState = null;
+                glassPanel.classList.remove("is-dragging");
             });
         </script>
     </body>
