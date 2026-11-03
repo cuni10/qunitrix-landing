@@ -38,6 +38,8 @@ body {
     fill: #ccff11;
     stroke-width: 5px;
     stroke: #ccff11;
+    stroke-linejoin: bevel; /* Suaviza las puntas afiladas sin deformarlas */
+    stroke-miterlimit: 1;
 }
 
 /* SHADER DE FONDO (Good Design WebGL Fluid Shader) */
